@@ -83,7 +83,7 @@ func handleJSON(c echo.Context) error {
 			endpoint specified for unmarshalling a specific data struct`)
 	}
 
-	return c.JSON(http.StatusOK, message)
+	return c.JSONPretty(http.StatusOK, message, "  ")
 }
 
 // handleDonationJSONAPI - will parse a Request with the json:api format using the Donation
@@ -107,5 +107,5 @@ func handleDonationJSONAPI(c echo.Context) error {
 			"Unable to parse Donation object into json:api for Response")
 	}
 
-	return c.JSON(http.StatusOK, c.Response())
+	return c.JSONPretty(http.StatusOK, c.Response(), "  ")
 }
