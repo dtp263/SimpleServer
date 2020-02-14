@@ -3,7 +3,9 @@ package main
 import (
 	"encoding/json"
 	"io/ioutil"
+	"math/rand"
 	"net/http"
+	"time"
 
 	"github.com/didip/tollbooth"
 	"github.com/didip/tollbooth_echo"
@@ -36,6 +38,13 @@ func main() {
 	e.Logger.Fatal(e.Start("127.0.0.1:8000"))
 }
 
+func burnTime() {
+	rand.Seed(time.Now().UnixNano())
+	n := rand.Intn(1000)
+	n += 500
+	time.Sleep(time.Duration(n) * time.Millisecond)
+}
+
 func isJSON(str string) bool {
 	var js json.RawMessage
 	return json.Unmarshal([]byte(str), &js) == nil
@@ -43,12 +52,14 @@ func isJSON(str string) bool {
 
 // handleGet - is your basic GET endpoint, it returns "Default Get"
 func handleGet(c echo.Context) error {
+	burnTime()
 	return c.String(http.StatusOK, "Default Get")
 }
 
 // handleJSON - will parse a JSON message into a Go struct, then
 // convert it back to a string, and return it in the Response.
 func handleJSON(c echo.Context) error {
+	burnTime()
 	body := c.Request().Body
 
 	wholeBody, err := ioutil.ReadAll(body)
@@ -78,6 +89,7 @@ func handleJSON(c echo.Context) error {
 // handleDonationJSONAPI - will parse a Request with the json:api format using the Donation
 // struct. Then it will convert it back to a string and return it in the Response.
 func handleDonationJSONAPI(c echo.Context) error {
+	burnTime()
 	body := c.Request().Body
 
 	donation := new(Donation)
